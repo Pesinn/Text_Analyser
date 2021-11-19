@@ -8,6 +8,7 @@ import gzip
 import json
 import pprint
 import db_layer
+import language
 
 data_folder = "news_data"
 
@@ -32,20 +33,20 @@ def combine_dictionaries(dict1, dict2):
   return merged
 
 def process_files():
-  for f in listdir(data_folder):    
+  for f in listdir(data_folder):
     inner_folder = data_folder+"/"+f+"/per_day"
     for i in listdir(inner_folder):
       full_path = join(inner_folder, i)
       try:
         d = json.load(gzip.open(full_path))
         for a in d:
-          title_analysis = nlp.analyse_nlp(d[a]["title"])
-          description_analysis = nlp.analyse_nlp(d[a]["description"])
+          title_analysis = nlp.analyse_nlp(d[a]["title"], language.get_language(f))
+          description_analysis = nlp.analyse_nlp(d[a]["description"], language.get_language(f))
           obj = {
             "article_id": a,
-            "article_language": title_analysis["language"],
+            "article_language": language.get_language(f),
             "publish_date": i[0:4]+"-"+i[4:6]+"-"+i[6:8],
-            "source": f, 
+            "source": f,
             "annotations": {
               "entities": {
                 "named": combine_dictionaries(
@@ -71,7 +72,6 @@ def process_files():
               }
             }
           }
-          break
           db_layer.save_object(obj)          
       except Exception as e:
         print(e)
@@ -84,5 +84,7 @@ def load_json():
   return data
 
 process_files()
+
+#print(language.get_language("9news.com.au"))
 
 #nlp.testing("Hashd deputy Abu Mahdi al-Muhandis: Iran’s man in Baghdad | Iraq | Al Jazeera")

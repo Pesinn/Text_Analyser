@@ -14,7 +14,11 @@
 ### Commands
 ```sh
 pip install -r requirements.txt
+
+python -m spacy download fr_core_news_sm
+python -m spacy download en_core_news_sm
 ```
+
 ```sh
 python3 app.js
 ```

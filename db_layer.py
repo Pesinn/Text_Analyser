@@ -16,4 +16,3 @@ def save_object(object):
 
 def save_objects(objects):
   x = _mycol.insert_many(objects)
-  print(x.inserted_ids)

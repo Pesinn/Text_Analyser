@@ -6,28 +6,28 @@ from spacy_langdetect import LanguageDetector
 
 nlp = spacy.load("en_core_web_sm")
 
+def get_language_package(lang):
+  languages = {
+    "en": "en_core_web_sm",
+    "fr": "fr_core_news_sm"
+  }
+  return languages[lang]
+
+def set_language(lang):
+  nlp = spacy.load(get_language_package(lang))
+
 def get_lang_detector(nlp, name):
     return LanguageDetector()
 
-def add_language_detector():
-  Language.factory("language_detector", func=get_lang_detector)
-  nlp.add_pipe('language_detector', last=True)
+# It sucks
+#def add_language_detector():
+#  Language.factory("language_detector", func=get_lang_detector)
+#  nlp.add_pipe('language_detector', last=True)
 
-add_language_detector()
-
-def analyse_nlp(text):
-  """
-  text = ("When Sebastian Thrun started working on self-driving cars at "
-        "Google in 2007, few people outside of the company took him "
-        "seriously wherever he was angry. “I can tell you very senior CEOs of major American "
-        "car companies would shake my hand and turn away because I wasn’t "
-        "worth talking to,” said Thrun, in an interview with Recode earlier "
-        "this week.")
-  """
+def analyse_nlp(text, lang):
   doc = nlp(text)
 
   nlp_data = {
-    "language": detect_language(doc),
     "categorized": get_categorized(doc),
     "entities": get_named_entities(doc)
   }
