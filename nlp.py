@@ -6,16 +6,6 @@ from spacy_langdetect import LanguageDetector
 
 nlp = spacy.load("en_core_web_sm")
 
-def get_language_package(lang):
-  languages = {
-    "en": "en_core_web_sm",
-    "fr": "fr_core_news_sm"
-  }
-  return languages[lang]
-
-def set_language(lang):
-  nlp = spacy.load(get_language_package(lang))
-
 def get_lang_detector(nlp, name):
     return LanguageDetector()
 
@@ -81,6 +71,18 @@ def get_named_entities(doc):
     except:
       named_entity[entity.text] += entity.label_
   return named_entity
+
+def convert_dict_to_list(dict):
+  print(dict)
+  l = []
+  for i in dict:
+    l.append({
+      "entity": i,
+      "count": dict[i]["count"],
+      "type": dict[i]["type"]
+    })
+  return l
+  
 
 def detect_language(doc):
   lang = doc._.language["language"]
