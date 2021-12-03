@@ -87,4 +87,4 @@ process_files()
 
 #print(language.get_language("9news.com.au"))
 
-#nlp.testing("Hashd deputy Abu Mahdi al-Muhandis: Iran’s man in Baghdad | Iraq | Al Jazeera")
+#print(nlp.remove_unrelevant_text("Hashd deputy Abu Mahdi al-Muhandis: Iran’s man in Baghdad | Iraq | Al Jazeera"))

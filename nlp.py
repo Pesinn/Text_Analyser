@@ -1,3 +1,4 @@
+from numpy import split
 import spacy
 import pprint
 
@@ -15,7 +16,7 @@ def get_lang_detector(nlp, name):
 #  nlp.add_pipe('language_detector', last=True)
 
 def analyse_nlp(text, lang):
-  doc = nlp(text)
+  doc = nlp(remove_unrelevant_text(text))
 
   nlp_data = {
     "categorized": get_categorized(doc),
@@ -83,7 +84,6 @@ def convert_dict_to_list(dict):
     })
   return l
   
-
 def detect_language(doc):
   lang = doc._.language["language"]
   # MongoDB doesn't handle 'id' as langauge
@@ -93,4 +93,24 @@ def detect_language(doc):
 
 def testing(text):
   doc = nlp(text)
-  print(detect_language(doc))
+  print(doc)
+  
+def remove_unrelevant_text(text):
+  if not text:
+    return ""
+  
+  split_arr = text.split("|")
+
+  # If text chunk contains less than 6 words
+  # we consider it as an unrelevant text.
+  # The reason is that an article will never
+  # only have 5 words in the title nor the description
+  article_text = ""
+  for i in split_arr:
+    print(len(i.split()))
+    if(len(i.split()) > 5):
+      if(len(article_text) == 0):
+        article_text = i
+      else:
+        article_text += f" {i}"
+  return article_text
