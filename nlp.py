@@ -10,10 +10,15 @@ nlp = spacy.load("en_core_web_sm")
 def get_lang_detector(nlp, name):
     return LanguageDetector()
 
+
+
 # It sucks
 #def add_language_detector():
 #  Language.factory("language_detector", func=get_lang_detector)
 #  nlp.add_pipe('language_detector', last=True)
+
+# Sentences that should be ignored
+ignore_array = ["Breaking UK News & World News Headlines"]
 
 def analyse_nlp(text, lang):
   doc = nlp(remove_unrelevant_text(text))
@@ -68,13 +73,12 @@ def get_named_entities(doc):
   named_entity = {}
   for entity in doc.ents:
     try:
-      named_entity[entity.text] = entity.label_
+      named_entity[entity.text.lower()] = entity.label_
     except:
-      named_entity[entity.text] += entity.label_
+      named_entity[entity.text.lower()] += entity.label_
   return named_entity
 
 def convert_dict_to_list(dict):
-  print(dict)
   l = []
   for i in dict:
     l.append({
@@ -107,10 +111,10 @@ def remove_unrelevant_text(text):
   # only have 5 words in the title nor the description
   article_text = ""
   for i in split_arr:
-    print(len(i.split()))
     if(len(i.split()) > 5):
-      if(len(article_text) == 0):
-        article_text = i
-      else:
-        article_text += f" {i}"
+      if(i not in ignore_array):
+        if(len(article_text) == 0):
+          article_text = i
+        else:
+          article_text += f" {i}"
   return article_text
