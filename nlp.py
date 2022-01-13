@@ -18,11 +18,12 @@ def get_lang_detector(nlp, name):
 #  nlp.add_pipe('language_detector', last=True)
 
 # Sentences that should be ignored
-ignore_array = ["Breaking UK News & World News Headlines"]
+ignore_array = ["Breaking UK News & World News Headlines",
+                "Daily Star"]
 
-def analyse_nlp(text, lang):
-  doc = nlp(remove_unrelevant_text(text))
-
+def analyse_nlp(text):
+  relevant_text = remove_unrelevant_text(text)
+  doc = nlp(relevant_text)
   nlp_data = {
     "categorized": get_categorized(doc),
     "entities": get_named_entities(doc)
@@ -99,22 +100,36 @@ def testing(text):
   doc = nlp(text)
   print(doc)
   
+# Getting rid of a text like:
+# "... | Daily News"
+# or
+# "... - Daily News"
 def remove_unrelevant_text(text):
   if not text:
     return ""
-  
+
   split_arr = text.split("|")
+  s = split_array(split_arr, " - ")
 
   # If text chunk contains less than 6 words
   # we consider it as an unrelevant text.
   # The reason is that an article will never
   # only have 5 words in the title nor the description
+
   article_text = ""
-  for i in split_arr:
+  for i in s:
     if(len(i.split()) > 5):
       if(i not in ignore_array):
         if(len(article_text) == 0):
           article_text = i
         else:
           article_text += f" {i}"
-  return article_text
+  return article_text.strip()
+
+def split_array(arr, split_by):
+  result_arr = []
+  for i in arr:
+    second_split = i.split(split_by)
+    for s in second_split:
+      result_arr.append(s.strip())
+  return result_arr

@@ -29,7 +29,7 @@ def convert_to_datetime(_date):
 def combine_dictionaries(dict1, dict2):
   merged = dict()
   merged.update(dict1)
-  merged.update(dict2)
+  merged.update(dict2)  
   return merged
 
 def process_files():
@@ -40,42 +40,49 @@ def process_files():
       try:
         d = json.load(gzip.open(full_path))
         for a in d:
-          title_analysis = nlp.analyse_nlp(d[a]["title"], language.get_language(f))
-          description_analysis = nlp.analyse_nlp(d[a]["description"], language.get_language(f))
-          obj = {
-            "article_id": a,
-            "article_language": language.get_language(f),
-            "publish_date": i[0:4]+"-"+i[4:6]+"-"+i[6:8],
-            "source": f,
-            "annotations": {
-              "entities": {
-                "named": combine_dictionaries(
-                    title_analysis["entities"],
-                    description_analysis["entities"]
-                )
-              },
-              "sentiment_analysis":
-                sentiment.combine_sentiment_scores(
-                  sentiment.sentiment_analysis(d[a]["title"]),
-                  sentiment.sentiment_analysis(d[a]["description"]))
-            },
-            "title": {
-              "text": d[a]["title"],
-              "keywords": {
-                "categorized": title_analysis["categorized"]
-              }
-            },
-            "description" : {
-              "text": d[a]["description"],
-              "keywords": {
-                "categorized": description_analysis["categorized"]
-              }
-            }
-          }
-          db_layer.save_object(obj)          
+          article_db = create_storage_article_obj(d[a], a, f, i)
+          db_layer.save_object(article_db)
       except Exception as e:
         print(e)
         continue
+
+def create_storage_article_obj(article, id, news_source, date):
+  title_stripped = nlp.remove_unrelevant_text(article["title"])
+  description_stripped = nlp.remove_unrelevant_text(article["description"])
+
+  title_analysis = nlp.analyse_nlp(title_stripped)
+  description_analysis = nlp.analyse_nlp(description_stripped)
+
+  return {
+    "article_id": id,
+    "article_language": language.get_language(news_source),
+    "publish_date": date[0:4]+"-"+date[4:6]+"-"+date[6:8],
+    "source": news_source,
+    "annotations": {
+      "entities": {
+        "named": combine_dictionaries(
+            title_analysis["entities"],
+            description_analysis["entities"]
+        )
+      },
+      "sentiment_analysis":
+        sentiment.combine_sentiment_scores(
+          sentiment.sentiment_analysis(article["title"]),
+          sentiment.sentiment_analysis(article["description"]))
+    },
+    "title": {
+      "text": title_stripped,
+      "keywords": {
+        "categorized": title_analysis["categorized"]
+      }
+    },
+    "description" : {
+      "text": description_stripped,
+      "keywords": {
+        "categorized": description_analysis["categorized"]
+      }
+    }
+  }
 
 def load_json():
   file = open('news_data.json',)
@@ -85,6 +92,10 @@ def load_json():
 
 process_files()
 
+#print(
+#  nlp.analyse_nlp("Coronation Street: Nick Tilsley to make sensational return to Weatherfield | Daily Star", language.get_language("9news.com.au"))
+#)
+
 #print(language.get_language("9news.com.au"))
 
-#print(nlp.remove_unrelevant_text("Hashd deputy Abu Mahdi al-Muhandis: Iran’s man in Baghdad | Iraq | Al Jazeera"))
+#print(nlp.remove_unrelevant_text("Bristol-Myers Squibb Company MORTIFIED after leaving rude nickname for teacher on essay | Daily Star"))
