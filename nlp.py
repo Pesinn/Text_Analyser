@@ -10,9 +10,6 @@ nlp = spacy.load("en_core_web_sm")
 def get_lang_detector(nlp, name):
     return LanguageDetector()
 
-
-
-# It sucks
 #def add_language_detector():
 #  Language.factory("language_detector", func=get_lang_detector)
 #  nlp.add_pipe('language_detector', last=True)
@@ -22,13 +19,15 @@ ignore_array = ["Breaking UK News & World News Headlines",
                 "Daily Star"]
 
 def analyse_nlp(text):
-  relevant_text = remove_unrelevant_text(text)
-  doc = nlp(relevant_text)
-  nlp_data = {
-    "categorized": get_categorized(doc),
-    "entities": get_named_entities(doc)
-  }
+  doc = nlp(text)
+  tokens = get_tokens(doc)
 
+  nlp_data = {
+    "categorized": tokens[0],
+    "entities": get_named_entities(doc),
+    "all_tokens": tokens[1].strip()
+  }
+  
   return nlp_data
 
 """
@@ -45,20 +44,23 @@ Returns data such as:
   ]
 }
 """
-def get_categorized(doc):
+def get_tokens(doc):
   all_stopwords = nlp.Defaults.stop_words
   stopword_filter = {"PUNCT", "ADV"}
   categorized = {}
+  all_tokens = ""
   for token in doc:
     if token.text not in all_stopwords and token.pos_ not in stopword_filter:
-      obj = {token.text: {"l": token.lemma_}}
+      obj = {token.text: {"l": token.lemma_.lower()}}
       try:
         # Objects should be unique
         if(obj not in categorized[token.pos_]):
           categorized[token.pos_].append(obj)
       except:
-        categorized[token.pos_] = [obj]
-  return categorized
+        categorized[token.pos_] = [obj]    
+      all_tokens += token.lemma_.lower()
+      all_tokens += " "
+  return categorized, all_tokens
 
 
 """
@@ -67,16 +69,18 @@ Returns data such as
   'Al Jazeera': 'ORG',
   'Asia Pacific': 'LOC',
   'China': 'GPE',
-  'Hong Kong': 'GPE'}
+  'Hong Kong': 'GPE'
+  }
 }
 """
 def get_named_entities(doc):
   named_entity = {}
   for entity in doc.ents:
+    text = entity.text.lower()
     try:
-      named_entity[entity.text.lower()] = entity.label_
+      named_entity[text] = entity.label_
     except:
-      named_entity[entity.text.lower()] += entity.label_
+      named_entity[text] += entity.label_
   return named_entity
 
 def convert_dict_to_list(dict):

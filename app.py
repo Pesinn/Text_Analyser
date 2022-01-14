@@ -41,6 +41,7 @@ def process_files():
         d = json.load(gzip.open(full_path))
         for a in d:
           article_db = create_storage_article_obj(d[a], a, f, i)
+          
           db_layer.save_object(article_db)
       except Exception as e:
         print(e)
@@ -72,12 +73,14 @@ def create_storage_article_obj(article, id, news_source, date):
     },
     "title": {
       "text": title_stripped,
+      "text_processed": title_analysis["all_tokens"],
       "keywords": {
         "categorized": title_analysis["categorized"]
       }
     },
     "description" : {
       "text": description_stripped,
+      "text_processed": description_analysis["all_tokens"],
       "keywords": {
         "categorized": description_analysis["categorized"]
       }
