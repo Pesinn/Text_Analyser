@@ -41,7 +41,6 @@ def process_files():
         d = json.load(gzip.open(full_path))
         for a in d:
           article_db = create_storage_article_obj(d[a], a, f, i)
-          
           db_layer.save_object(article_db)
       except Exception as e:
         print(e)

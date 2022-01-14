@@ -46,7 +46,7 @@ Returns data such as:
 """
 def get_tokens(doc):
   all_stopwords = nlp.Defaults.stop_words
-  stopword_filter = {"PUNCT", "ADV"}
+  stopword_filter = {"PUNCT", "ADV", "ADP"}
   categorized = {}
   all_tokens = ""
   for token in doc:
