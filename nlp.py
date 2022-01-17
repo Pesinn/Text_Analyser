@@ -19,6 +19,8 @@ ignore_array = ["Breaking UK News & World News Headlines",
                 "Daily Star"]
 
 def analyse_nlp(text):
+  text = clean_text(text)
+  print(text)
   doc = nlp(text)
   tokens = get_tokens(doc)
 
@@ -103,7 +105,39 @@ def detect_language(doc):
 def testing(text):
   doc = nlp(text)
   print(doc)
-  
+
+def clean_text(text):
+  text = remove_punctuations(text)
+  text = remove_ending(text)
+  return text
+
+def remove_punctuations(text):
+  punctuation='!?,.:;"\')(_-'
+  new_text = ""
+  for i in text:
+    if(i not in punctuation):
+      new_text += i
+  return new_text
+
+
+# Remove ending such as '’s'
+# Example: "Tesla’s latest Roadster model"
+def remove_ending(text):
+  i = 0
+  found = False
+  new_text = ""
+  while i < len(text):
+    if(text[i] == '’'):
+      found = True
+    else:
+      if(found == True and text[i] == "s"):
+        found = False
+      else:
+        new_text += text[i]
+    i += 1
+
+  return text
+
 # Getting rid of a text like:
 # "... | Daily News"
 # or

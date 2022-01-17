@@ -94,10 +94,12 @@ def load_json():
 
 process_files()
 
-#print(
-#  nlp.analyse_nlp("Coronation Street: Nick Tilsley to make sensational return to Weatherfield | Daily Star", language.get_language("9news.com.au"))
-#)
 
+#rm = nlp.remove_unrelevant_text("Elon Musk net worth how much is SpaceX CEO worth? How much is his Tesla salary?")
+#print(
+#  beautify_print(nlp.analyse_nlp(rm))
+#)
+#TESLA’s latest Roadster model left test passengers in shockas theyexperienced Elon Musk’s new creation at full speed.
 #print(language.get_language("9news.com.au"))
 
 #print(nlp.remove_unrelevant_text("Bristol-Myers Squibb Company MORTIFIED after leaving rude nickname for teacher on essay | Daily Star"))
