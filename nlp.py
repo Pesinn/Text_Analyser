@@ -1,6 +1,5 @@
 from numpy import split
 import spacy
-import pprint
 
 from spacy.language import Language
 from spacy_langdetect import LanguageDetector
@@ -20,7 +19,6 @@ ignore_array = ["Breaking UK News & World News Headlines",
 
 def analyse_nlp(text):
   text = clean_text(text)
-  print(text)
   doc = nlp(text)
   tokens = get_tokens(doc)
 

@@ -3,6 +3,7 @@ from os.path import join
 from datetime import date
 
 import nlp
+import LanguageProcess.nlp_nltk
 import sentiment
 import gzip
 import json
@@ -92,9 +93,12 @@ def load_json():
   file.close()
   return data
 
-process_files()
+#process_files()
+text = "Elon Musk net worth how much is SpaceX CEO worth? How much is his Tesla salary?"
 
+print(LanguageProcess.nlp_nltk.named_entities_nltk(text))
 
+#print(LanguageProcess.nlp_nltk.clean_text(text))
 #rm = nlp.remove_unrelevant_text("Elon Musk net worth how much is SpaceX CEO worth? How much is his Tesla salary?")
 #print(
 #  beautify_print(nlp.analyse_nlp(rm))
