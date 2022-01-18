@@ -3,6 +3,7 @@ from os.path import join
 from datetime import date
 
 import nlp
+import utils as ut
 import LanguageProcess.nlp_nltk
 import sentiment
 import gzip
@@ -26,12 +27,6 @@ def convert_to_datetime(_date):
         return date(year=int(_date[0:4]), month=int(_date[4:6]), day=1)
     if(len(_date) == 8):
         return date(year=int(_date[0:4]), month=int(_date[4:6]), day=int(_date[6:8]))
-
-def combine_dictionaries(dict1, dict2):
-  merged = dict()
-  merged.update(dict1)
-  merged.update(dict2)  
-  return merged
 
 def process_files():
   for f in listdir(data_folder):
@@ -61,7 +56,7 @@ def create_storage_article_obj(article, id, news_source, date):
     "source": news_source,
     "annotations": {
       "entities": {
-        "named": combine_dictionaries(
+        "named": ut.combine_dictionaries(
             title_analysis["entities"],
             description_analysis["entities"]
         )
