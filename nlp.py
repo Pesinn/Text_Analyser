@@ -24,13 +24,36 @@ def analyse_nlp(text):
 
   # Get named entities from nltk
   named_ent = nltk.named_entities_nltk(text)
-
-  named_ent["entities"] = ut.combine_dictionaries(
+  
+  nlp_data["entities"] = combine_named_entities(
     nlp_data["entities"],
     named_ent
   )
+
   return nlp_data
 
+# N1 entities should be the leading data
+# if N2 does not exist in N1, then it
+# should be added to N1
+def combine_named_entities(n1, n2):  
+  entities = n1
+  found = False
+  
+  if(entities == {}):
+    return n2
+  elif(n2 == {}):
+    return n1
+  
+  for i in n2:
+    for a in n1:
+      if(i == a):
+        found = True
+
+    if (found == False):
+      entities[i] = n2[i]
+    found = False
+
+  return entities
 
 def detect_language(doc):
   lang = doc._.language["language"]
