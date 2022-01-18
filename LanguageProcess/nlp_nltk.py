@@ -3,6 +3,8 @@ from os import remove
 import nltk
 from nltk.tree import Tree
 from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+from nltk.tokenize import sent_tokenize
 
 def _speech_tag(word_list):
   return nltk.pos_tag(word_list)
@@ -33,10 +35,11 @@ def text_to_list(text):
   for i in text.split():
     if(i[0].isupper() == True):
       if(i.isupper()):
-        text_list.append(prev)
+        if(len(prev) > 0):
+          text_list.append(prev)
         text_list.append(i)
         prev = ""
-      if(prev == ""):
+      elif(prev == ""):
         prev += i
       else:
         prev += " "
@@ -53,6 +56,7 @@ def text_to_list(text):
 
 def named_entities_nltk(text):
   text_list = text_to_list(text)
+#  text_list = word_tokenize(text)
   cleaned = clean_text(text_list)
 
   tagged = _speech_tag(cleaned)
@@ -63,8 +67,8 @@ def named_entities_nltk(text):
   named_entity = {}
   for item in items:
     try:
-      named_entity[item[0]] = item[1]
+      named_entity[item[0].lower()] = item[1]
     except:
-      named_entity[item[0]] += item[1]
+      named_entity[item[0].lower()] += item[1]
 
   return named_entity
