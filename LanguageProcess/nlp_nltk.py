@@ -66,9 +66,10 @@ def named_entities_nltk(text):
   
   named_entity = {}
   for item in items:
-    try:
-      named_entity[item[0].lower()] = item[1]
-    except:
-      named_entity[item[0].lower()] += item[1]
+    if(item[1] == "NNP"):
+      try:
+        named_entity[item[0].lower()] = item[1]
+      except:
+        named_entity[item[0].lower()] += item[1]
 
   return named_entity
