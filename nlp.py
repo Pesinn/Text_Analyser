@@ -1,6 +1,8 @@
 from numpy import split
-import LanguageProcess.spacy as sp
-import LanguageProcess.nlp_nltk as nltk
+import LanguageProcess.External.spacy as sp
+import LanguageProcess.External.nlp_nltk as nltk
+import LanguageProcess.NLP.en as english
+
 import utils as ut
 from spacy.language import Language
 from spacy_langdetect import LanguageDetector
@@ -16,8 +18,8 @@ def get_lang_detector(nlp, name):
 ignore_array = ["Breaking UK News & World News Headlines",
                 "Daily Star"]
 
-def analyse_nlp(text):
-  text = clean_text(text)
+def analyse_nlp(text, lang):
+  text = clean_text(text, lang)
 
   # Get data from Spacy
   nlp_data = sp.natural_language_process(text)
@@ -62,36 +64,10 @@ def detect_language(doc):
     return "indonesian"
   return lang
 
-def clean_text(text):
-  text = remove_punctuations(text)
-  text = remove_ending(text)
+def clean_text(text, lang):
+  if(lang == "en"):
+    text = english.clean_text(text)
   return text
-
-def remove_punctuations(text):
-  punctuation='!?,.:;"\')(_-'
-  new_text = ""
-  for i in text:
-    if(i not in punctuation):
-      new_text += i
-  return new_text
-
-# Remove ending such as '’s'
-# Example: "Tesla’s latest Roadster model"
-def remove_ending(text):
-  i = 0
-  found = False
-  new_text = ""
-  while i < len(text):
-    if(text[i] == '’'):
-      found = True
-    else:
-      if(found == True and text[i] == "s"):
-        found = False
-      else:
-        new_text += text[i]
-    i += 1
-
-  return new_text
 
 # Getting rid of a text like:
 # "... | Daily News"

@@ -46,8 +46,8 @@ def create_storage_article_obj(article, id, news_source, date):
   title_stripped = nlp.remove_unrelevant_text(article["title"])
   description_stripped = nlp.remove_unrelevant_text(article["description"])
 
-  title_analysis = nlp.analyse_nlp(title_stripped)
-  description_analysis = nlp.analyse_nlp(description_stripped)
+  title_analysis = nlp.analyse_nlp(title_stripped, language.get_language(news_source))
+  description_analysis = nlp.analyse_nlp(description_stripped, language.get_language(news_source))
 
   return {
     "article_id": id,
