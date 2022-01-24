@@ -4,7 +4,6 @@ from datetime import date
 
 import nlp
 import utils as ut
-import LanguageProcess.nlp_nltk
 import sentiment
 import gzip
 import json
