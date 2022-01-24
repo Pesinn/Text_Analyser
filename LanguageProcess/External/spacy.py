@@ -7,6 +7,7 @@ from spacy_langdetect import LanguageDetector
 nlp = spacy.load("en_core_web_sm")
 
 def natural_language_process(text):
+  print("text: ", text)
   doc = nlp(text)
   tokens = get_tokens(doc)
 

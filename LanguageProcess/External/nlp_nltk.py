@@ -55,8 +55,8 @@ def text_to_list(text):
   return text_list
 
 def named_entities_nltk(text):
-  text_list = text_to_list(text)
-#  text_list = word_tokenize(text)
+#  text_list = text_to_list(text)
+  text_list = word_tokenize(text)
   cleaned = clean_text(text_list)
 
   tagged = _speech_tag(cleaned)
