@@ -63,18 +63,17 @@ def create_storage_article_obj(article, id, news_source, date):
       "sentiment_analysis":
         sentiment.combine_sentiment_scores(
           sentiment.sentiment_analysis(article["title"]),
-          sentiment.sentiment_analysis(article["description"]))
+          sentiment.sentiment_analysis(article["description"])),
     },
+    "keywords": title_analysis["all_tokens"] + description_analysis["all_tokens"],
     "title": {
       "text": title_stripped,
-      "text_processed": title_analysis["all_tokens"],
       "keywords": {
         "categorized": title_analysis["categorized"]
       }
     },
     "description" : {
       "text": description_stripped,
-      "text_processed": description_analysis["all_tokens"],
       "keywords": {
         "categorized": description_analysis["categorized"]
       }
