@@ -86,17 +86,14 @@ def load_json():
   file.close()
   return data
 
-#process_files()
-text = "Elon Musk net worth how much is SpaceX CEO worth? How much is his Tesla salary?"
+def startup():
+  print("RC - ReCreate Database")
+  print("PR - Process news articles")
 
-print(LanguageProcess.nlp_nltk.named_entities_nltk(text))
+  inp = input("What do you want to do?: ")
+  if(inp == "RC"):
+    db_layer.recreate_db()
+  elif(inp == "PR"):
+    process_files()
 
-#print(LanguageProcess.nlp_nltk.clean_text(text))
-#rm = nlp.remove_unrelevant_text("Elon Musk net worth how much is SpaceX CEO worth? How much is his Tesla salary?")
-#print(
-#  beautify_print(nlp.analyse_nlp(rm))
-#)
-#TESLA’s latest Roadster model left test passengers in shockas theyexperienced Elon Musk’s new creation at full speed.
-#print(language.get_language("9news.com.au"))
-
-#print(nlp.remove_unrelevant_text("Bristol-Myers Squibb Company MORTIFIED after leaving rude nickname for teacher on essay | Daily Star"))
+startup()
