@@ -28,7 +28,9 @@ def convert_to_datetime(_date):
         return date(year=int(_date[0:4]), month=int(_date[4:6]), day=int(_date[6:8]))
 
 def process_files():
-  for f in listdir(data_folder):
+  l = listdir(data_folder)
+  l.sort()
+  for f in l:
     inner_folder = data_folder+"/"+f+"/per_day"
     for i in listdir(inner_folder):
       full_path = join(inner_folder, i)

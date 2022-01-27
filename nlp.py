@@ -20,7 +20,6 @@ ignore_array = ["Breaking UK News & World News Headlines",
 
 def analyse_nlp(text, lang):
   text = clean_text(text, lang)
-
   # Get data from Spacy
   nlp_data = sp.natural_language_process(text)
 
@@ -79,7 +78,6 @@ def remove_unrelevant_text(text):
 
   split_arr = text.split("|")
   s = split_array(split_arr, " - ")
-
   # If text chunk contains less than 6 words
   # we consider it as an unrelevant text.
   # The reason is that an article will never
