@@ -21,9 +21,18 @@ pip install --user -U numpy
 
 pip install -r requirements.txt
 
-
 python -m spacy download fr_core_news_sm
 python -m spacy download en_core_news_sm
+
+python
+import nltk
+nltk.download('punct')
+nltk.download('stopwords')
+nltk.download('averaged_perceptron_tagger')
+nltk.download('maxent_ne_chunker')
+nltk.download('words')
+CTRL-D
+
 ```
 
 ```sh
