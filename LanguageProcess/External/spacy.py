@@ -9,7 +9,7 @@ nlp = spacy.load("en_core_web_sm")
 def natural_language_process(text):
   doc = nlp(text)
   tokens = get_tokens(doc)
-
+  
   nlp_data = {
     "categorized": tokens[0],
     "entities": get_named_entities(doc),

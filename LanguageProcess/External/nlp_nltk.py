@@ -54,7 +54,7 @@ def text_to_list(text):
         prev = ""
   return text_list
 
-def named_entities_nltk(text):
+def named_entities(text):
 #  text_list = text_to_list(text)
   text_list = word_tokenize(text)
   cleaned = clean_text(text_list)
@@ -63,7 +63,7 @@ def named_entities_nltk(text):
   chunk = _named_entities_chunk(tagged)
   
   items = nltk.chunk.tree2conlltags(chunk)
-  
+
   named_entity = {}
   for item in items:
     if(item[1] == "NNP"):
