@@ -1,7 +1,7 @@
 from numpy import split
 import LanguageProcess.External.spacy as sp
-import LanguageProcess.External.nlp_nltk as nltk
 import LanguageProcess.NLP.en as english
+import LanguageProcess.External.core_nlp as cnlp
 
 import utils as ut
 from spacy.language import Language
@@ -18,17 +18,21 @@ def get_lang_detector(nlp, name):
 ignore_array = ["Breaking UK News & World News Headlines",
                 "Daily Star"]
 
+def test(text):
+  #return sp.natural_language_process(text)
+  return cnlp.named_entities(text)
+
 def analyse_nlp(text, lang):
   text = clean_text(text, lang)
   # Get data from Spacy
   nlp_data = sp.natural_language_process(text)
 
-  # Get named entities from nltk
-  named_ent = nltk.named_entities_nltk(text)
+  # Get named entities from CoreNLP
+  named_ent = cnlp.named_entities(text)
   
   nlp_data["entities"] = combine_named_entities(
-    nlp_data["entities"],
-    named_ent
+    named_ent,
+    nlp_data["entities"]
   )
 
   return nlp_data
