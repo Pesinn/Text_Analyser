@@ -63,7 +63,7 @@ Returns data such as
 def get_named_entities(doc):
   named_entity = {}
   for entity in doc.ents:
-    text = entity.text.lower()
+    text = (entity.text.strip()).lower()
     try:
       named_entity[text] = entity.label_
     except:
