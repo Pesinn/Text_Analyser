@@ -1,6 +1,7 @@
 from numpy import split
 import LanguageProcess.External.spacy as sp
 import LanguageProcess.NLP.en as english
+import LanguageProcess.NLP.default as default_lang
 import LanguageProcess.External.core_nlp as cnlp
 
 import utils as ut
@@ -70,6 +71,8 @@ def detect_language(doc):
 def clean_text(text, lang):
   if(lang == "en"):
     text = english.clean_text(text)
+  else:
+    text = default_lang.clean_text(text)
   return text
 
 # Getting rid of a text like:
