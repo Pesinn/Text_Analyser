@@ -38,21 +38,26 @@ def process_files():
         d = json.load(gzip.open(full_path))
         for a in d:
           article_db = create_storage_article_obj(d[a], a, f, i)
-          db_layer.save_object(article_db)
+          if(article_db != {}):
+            db_layer.save_object(article_db)
       except Exception as e:
         print(e)
         continue
 
 def create_storage_article_obj(article, id, news_source, date):
+  lang = language.get_language(news_source)
+  if(lang != "en"):
+    return {}
+
   title_stripped = nlp.remove_unrelevant_text(article["title"])
   description_stripped = nlp.remove_unrelevant_text(article["description"])
 
-  title_analysis = nlp.analyse_nlp(title_stripped, language.get_language(news_source))
-  description_analysis = nlp.analyse_nlp(description_stripped, language.get_language(news_source))
+  title_analysis = nlp.analyse_nlp(title_stripped, lang)
+  description_analysis = nlp.analyse_nlp(description_stripped, lang)
 
   return {
     "article_id": id,
-    "article_language": language.get_language(news_source),
+    "article_language": lang,
     "publish_date": date[0:4]+"-"+date[4:6]+"-"+date[6:8],
     "source": news_source,
     "annotations": {

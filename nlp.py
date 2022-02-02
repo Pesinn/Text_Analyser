@@ -25,6 +25,7 @@ def test(text):
 
 def analyse_nlp(text, lang):
   text = clean_text(text, lang)
+  
   # Get data from Spacy
   nlp_data = sp.natural_language_process(text)
 

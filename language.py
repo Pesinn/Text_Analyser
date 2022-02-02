@@ -1,5 +1,5 @@
 lang_dict = {
-  "20minutes.fr": "en",
+  "20minutes.fr": "fr",
   "20minutos.es": "es",
   "9news.com.au": "en",
   "abc.es": "es",
