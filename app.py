@@ -49,8 +49,8 @@ def create_storage_article_obj(article, id, news_source, date):
   if(lang != "en"):
     return {}
 
-  title_stripped = nlp.remove_unrelevant_text(article["title"])
-  description_stripped = nlp.remove_unrelevant_text(article["description"])
+  title_stripped = nlp.remove_irrelevant_text(article["title"])
+  description_stripped = nlp.remove_irrelevant_text(article["description"])
 
   title_analysis = nlp.analyse_nlp(title_stripped, lang)
   description_analysis = nlp.analyse_nlp(description_stripped, lang)

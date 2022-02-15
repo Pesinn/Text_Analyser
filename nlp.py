@@ -80,14 +80,14 @@ def clean_text(text, lang):
 # "... | Daily News"
 # or
 # "... - Daily News"
-def remove_unrelevant_text(text):
+def remove_irrelevant_text(text):
   if not text:
     return ""
 
   split_arr = text.split("|")
   s = split_array(split_arr, " - ")
   # If text chunk contains less than 6 words
-  # we consider it as an unrelevant text.
+  # we consider it as an irrelevant text.
   # The reason is that an article will never
   # only have 5 words in the title nor the description
 
