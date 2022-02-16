@@ -48,6 +48,10 @@ def create_storage_article_obj(article, id, news_source, date):
   lang = language.get_language(news_source)
   if(lang != "en"):
     return {}
+  
+  link = ""
+  for i in article["link"]:
+    link = i
 
   title_stripped = nlp.remove_irrelevant_text(article["title"])
   description_stripped = nlp.remove_irrelevant_text(article["description"])
@@ -56,10 +60,11 @@ def create_storage_article_obj(article, id, news_source, date):
   description_analysis = nlp.analyse_nlp(description_stripped, lang)
 
   return {
-    "article_id": id,
+    "_id": id,
     "article_language": lang,
     "publish_date": date[0:4]+"-"+date[4:6]+"-"+date[6:8],
     "source": news_source,
+    "link": link,
     "annotations": {
       "entities": {
         "named": ut.combine_dictionaries(

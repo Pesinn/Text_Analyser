@@ -11,7 +11,7 @@ _mycol = _mydb["news_data"]
 print("Databases: ", _dbList)
 
 def save_object(object):
-  k = {"article_id": object["article_id"]}
+  k = {"_id": object["_id"]}
   x = _mycol.update(k, object, upsert=True)
   #print(x)
 
