@@ -1,6 +1,6 @@
 import stanza
 
-nlp = stanza.Pipeline('en')
+nlp = stanza.Pipeline('en', processors="tokenize,ner")
 
 def named_entities(text):
   doc = nlp(text)
