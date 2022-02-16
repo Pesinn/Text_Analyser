@@ -86,20 +86,8 @@ def remove_irrelevant_text(text):
 
   split_arr = text.split("|")
   s = split_array(split_arr, " - ")
-  # If text chunk contains less than 6 words
-  # we consider it as an irrelevant text.
-  # The reason is that an article will never
-  # only have 5 words in the title nor the description
-
-  article_text = ""
-  for i in s:
-    if(len(i.split()) > 5):
-      if(i not in ignore_array):
-        if(len(article_text) == 0):
-          article_text = i
-        else:
-          article_text += f" {i}"
-  return article_text.strip()
+  
+  return find_biggest_legal_element(s).strip()
 
 # Split array by specific character
 def split_array(arr, split_by):
@@ -109,3 +97,14 @@ def split_array(arr, split_by):
     for s in second_split:
       result_arr.append(s.strip())
   return result_arr
+
+def find_biggest_legal_element(arr):
+  biggest = ""
+  biggest_size = 0
+  for i in arr:
+    if(i not in ignore_array):
+      curr_len = len(i)
+      if(biggest_size < curr_len):
+        biggest = i
+        biggest_size = curr_len
+  return biggest
