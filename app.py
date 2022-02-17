@@ -31,6 +31,7 @@ def process_files():
   l = listdir(data_folder)
   l.sort()
   for f in l:
+    print(f)
     inner_folder = data_folder+"/"+f+"/per_day"
     for i in listdir(inner_folder):
       full_path = join(inner_folder, i)
