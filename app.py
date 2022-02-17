@@ -77,7 +77,7 @@ def create_storage_article_obj(article, id, news_source, date):
           sentiment.sentiment_analysis(article["title"]),
           sentiment.sentiment_analysis(article["description"])),
     },
-    "keywords": title_analysis["all_tokens"] + description_analysis["all_tokens"],
+    "keywords": title_analysis["all_tokens"] + " " + description_analysis["all_tokens"],
     "title": {
       "text": title_stripped,
       "keywords": {
