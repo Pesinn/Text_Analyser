@@ -38,16 +38,13 @@ def process_files():
         d = json.load(gzip.open(full_path))
         for a in d:
           article_db = create_storage_article_obj(d[a], a, f, i)
-          if(article_db != {}):
-            db_layer.save_object(article_db)
+          db_layer.save_object(article_db)
       except Exception as e:
         print(e)
         continue
 
 def create_storage_article_obj(article, id, news_source, date):
   lang = language.get_language(news_source)
-  if(lang != "en"):
-    return {}
   
   link = ""
   for i in article["link"]:
