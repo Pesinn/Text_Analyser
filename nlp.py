@@ -17,7 +17,8 @@ def get_lang_detector(nlp, name):
 
 # Sentences that should be ignored
 ignore_array = ["Breaking UK News & World News Headlines",
-                "Daily Star"]
+                "Daily Star"
+                "read more"]
 
 def test(text):
   #return sp.natural_language_process(text)
@@ -86,6 +87,7 @@ def remove_irrelevant_text(text):
 
   split_arr = text.split("|")
   s = split_array(split_arr, " - ")
+  s = split_array(s, " -- ")
   
   return find_biggest_legal_element(s).strip()
 
