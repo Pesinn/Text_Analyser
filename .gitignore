@@ -1,5 +1,6 @@
 # Extra content
 news_data
+processed.txt
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
