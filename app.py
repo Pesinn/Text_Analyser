@@ -33,7 +33,7 @@ def process_files():
   l.sort()
   for f in l:
     print(f)
-    if not fp.exist(f):
+    if can_be_processed(f):
       inner_folder = data_folder+"/"+f+"/per_day"
       for i in listdir(inner_folder):
         full_path = join(inner_folder, i)
@@ -47,6 +47,11 @@ def process_files():
           print(e)
           continue
         fp.set_processed(f)
+
+def can_be_processed(name):
+  if fp.exist(name) or name[-2] == "fr" or name[-2] == "de" or name[-2] == "es" or name[-2] == "it":
+    return False
+  return True
 
 def create_storage_article_obj(article, id, news_source, date):
   lang = language.get_language(news_source)
