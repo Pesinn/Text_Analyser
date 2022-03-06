@@ -1,6 +1,7 @@
 from os import listdir
 from os.path import join
 from datetime import date
+import file_process as fp
 
 import nlp
 import utils as ut
@@ -18,38 +19,45 @@ def beautify_print(t):
   print(json_str)
 
 def convert_to_datetime(_date):
-    if(len(_date) <= 3 or len(_date) == 5 or len(_date) == 7 or len(_date) > 8):
-        raise Exception(f"Input date cannot include {len(_date)} digits - it must contain 4,6 or 8")
-    if(len(_date) == 4):
-        return date(year=int(_date[0:4]), month=1, day=1)
-    if(len(_date) == 6):
-        return date(year=int(_date[0:4]), month=int(_date[4:6]), day=1)
-    if(len(_date) == 8):
-        return date(year=int(_date[0:4]), month=int(_date[4:6]), day=int(_date[6:8]))
+  if(len(_date) <= 3 or len(_date) == 5 or len(_date) == 7 or len(_date) > 8):
+    raise Exception(f"Input date cannot include {len(_date)} digits - it must contain 4,6 or 8")
+  if(len(_date) == 4):
+    return date(year=int(_date[0:4]), month=1, day=1)
+  if(len(_date) == 6):
+    return date(year=int(_date[0:4]), month=int(_date[4:6]), day=1)
+  if(len(_date) == 8):
+    return date(year=int(_date[0:4]), month=int(_date[4:6]), day=int(_date[6:8]))
 
 def process_files():
   l = listdir(data_folder)
   l.sort()
   for f in l:
     print(f)
-    inner_folder = data_folder+"/"+f+"/per_day"
-    for i in listdir(inner_folder):
-      full_path = join(inner_folder, i)
-      try:
-        d = json.load(gzip.open(full_path))
-        for a in d:
-          article_db = create_storage_article_obj(d[a], a, f, i)
-          if(article_db != {}):
-            db_layer.save_object(article_db)
-      except Exception as e:
-        print(e)
-        continue
+    if can_be_processed(f):
+      inner_folder = data_folder+"/"+f+"/per_day"
+      for i in listdir(inner_folder):
+        full_path = join(inner_folder, i)
+        try:
+          d = json.load(gzip.open(full_path))
+          for a in d:
+            article_db = create_storage_article_obj(d[a], a, f, i)
+            if(article_db != {}):
+              db_layer.save_object(article_db)
+        except Exception as e:
+          print(e)
+          continue
+        fp.set_processed(f)
+
+def can_be_processed(name):
+  if fp.exist(name) or name[-2] == "fr" or name[-2] == "de" or name[-2] == "es" or name[-2] == "it":
+    return False
+  return True
 
 def create_storage_article_obj(article, id, news_source, date):
   lang = language.get_language(news_source)
   if(lang != "en"):
     return {}
-  
+
   link = ""
   for i in article["link"]:
     link = i
