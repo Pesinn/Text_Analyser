@@ -46,7 +46,7 @@ def process_files():
         except Exception as e:
           print(e)
           continue
-        fp.set_processed(f)
+      fp.set_processed(f)
 
 def can_be_processed(name):
   if fp.exist(name) or name[-2] == "fr" or name[-2] == "de" or name[-2] == "es" or name[-2] == "it":
