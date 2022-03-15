@@ -24,6 +24,10 @@ class nlp_test():
       nlp.remove_irrelevant_text("This is headline | Breaking UK News & World News Headlines"),
       "This is headline",
       "Should return: This is headline" )
+    self.assertEqual(
+      nlp.remove_irrelevant_text("This is the article headline | some text | some text | some other text to del"),
+      "This is the article headline",
+      "Should return: This is the article headline" )
 
 class TestSum(unittest.TestCase):
 
