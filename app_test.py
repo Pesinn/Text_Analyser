@@ -1,5 +1,6 @@
 import nlp
 import unittest
+import utils
 
 class nlp_test():
 
@@ -29,9 +30,74 @@ class nlp_test():
       "This is the article headline",
       "Should return: This is the article headline" )
 
-class TestSum(unittest.TestCase):
+class utils_test():
+  def test_remove_duplicate_words(self):
+    self.assertEqual(
+      utils.remove_duplicate_words("abraham superman is superman but superman is not necessarily abraham"),
+      "abraham superman is but not necessarily",
+      "Should return: abraham superman is but not necessarily"
+    )
+    self.assertEqual(
+      utils.remove_duplicate_words("this should be returned as it is"),
+      "this should be returned as it is",
+      "Should return: this should be returned as it is"
+    )
 
+  def test_combine_dictionaries(self):
+    self.assertEqual(
+      utils.combine_dictionaries({
+        "19": "CARDINAL",
+        "New York": "GPE"
+      }, {
+        "Queensland": "GPE",
+        "New York": "GPE"
+      }),
+      {
+        "19": "CARDINAL",
+        "New York": "GPE",
+        "Queensland": "GPE"
+      },
+      """
+      Should return: {
+        "19": "CARDINAL",
+        "New York": "GPE",
+        "Queensland": "GPE"
+      }
+      """
+    )
+
+    self.assertEqual(
+      utils.combine_dictionaries({
+        "11": "CARDINAL",
+        "two": "CARDINAL"
+      }, {
+        "4pm": "TIME",
+        "victoria": "GPE"
+      }),
+      {
+        "11": "CARDINAL",
+        "two": "CARDINAL",
+        "4pm": "TIME",
+        "victoria": "GPE"
+      },
+      """
+      Should return: {
+        "11": "CARDINAL",
+        "two": "CARDINAL",
+        "4pm": "TIME",
+        "victoria": "GPE"
+      }
+      """
+    )
+
+class TestSum(unittest.TestCase):
     def test_remove_irrelevant_text(self):
       nlp_test.test_remove_irrelevant_test(self)
+
+    def test_remove_duplicate_words(self):
+      utils_test.test_remove_duplicate_words(self)
+
+    def test_combine_dictionaries(self):
+      utils_test.test_combine_dictionaries(self)
 
 unittest.main()
