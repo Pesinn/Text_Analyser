@@ -110,11 +110,55 @@ def load_json():
 def startup():
   print("RC - ReCreate Database")
   print("PR - Process news articles")
+  print("I - Indexes")
 
-  inp = input("What do you want to do?: ")
-  if(inp == "RC"):
-    db_layer.recreate_db()
-  elif(inp == "PR"):
+  inp = input("What do you want to do?: ").upper()
+  if inp == "RC":
+    recreate_input()
+  elif inp == "PR":
     process_files()
+  elif inp == "I":
+    indexes_input()
+
+def recreate_input():
+  inp = input("Are you really sure? (write YES and press enter if you are): ")
+  if inp == "YES":
+    print("Recreating DB...")
+    db_layer.recreate_db()
+
+def indexes_input():
+  print("C - Create")
+  print("R - Remove")
+  inp = input("").upper()
+  if inp == "C":
+    create_index_input()
+  elif inp == "R":
+    delete_index_input()
+  
+def create_index_input():
+  print("T - Create Text Index")
+  print("W - Create Wildcard Index")
+  inp = input("").upper()
+  
+  if inp == "T":
+    print("Creating Text Index")
+    db_layer.create_text_index()
+  elif inp == "W":
+    print("Creating Wildcard Index")
+    db_layer.create_wildcard_index()
+
+def delete_index_input():
+  print("A - Remove all indexes")
+  print("T - Remove Text index")
+  print("W - Remove Wildcard index")
+  inp = input("").upper()
+
+  if inp == "A":
+    print("Removing All Indexes")
+    db_layer.remove_all_indexes()
+  elif inp == "T":
+    db_layer.remove_text_index()
+  elif inp == "W":
+    db_layer.remove_wildcard_index()
 
 startup()
