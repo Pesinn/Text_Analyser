@@ -11,7 +11,8 @@ _mycol = _mydb["news_data"]
 
 _index_names = {
   "TEXT": {"name": "text_index", "fields": "keywords"},
-  "WILDCARD": {"name": "wildcard_index", "fields": "$**"}
+  "WILDCARD": {"name": "wildcard_index", "fields": "$**"},
+  "REGULAR": {"name": "regular_index", "fields": "keywords"}
 }
 
 print("Databases: ", _dbList)
@@ -44,8 +45,8 @@ def recreate_indexes(type):
   create_index(type)
 
 def remove_all_indexes():
-  remove_index("WILDCARD")
-  remove_index("TEXT")
+  for i in _index_names:
+    remove_index(i)
 
 def remove_wildcard_index():
   remove_index("WILDCARD")
@@ -53,25 +54,45 @@ def remove_wildcard_index():
 def remove_text_index():
   remove_index("TEXT")
   
+def remove_regular_index():
+  remove_index("REGULAR")
+  
 def create_wildcard_index():
   create_index("WILDCARD")
   
 def create_text_index():
   create_index("TEXT")
+  
+def create_regular_index():
+  create_index("REGULAR")
 
 def create_index(type):
   try:
-    response = _mycol.create_index([(_index_names[type]["fields"],
-                                    pymongo.TEXT)],
-                        language_override="article_language",
-                        name=_index_names[type]["name"])
+    response = ""
+    if type == "TEXT" or type == "WILDCARD":
+      response = create_text_index(type)
+    else:
+      response = create_regular_index_by_type(type)
     print(response)
     print_index_info()
   except Exception as error:
     print(f"exception when creating an index with type {type}", error)
+    
+def create_text_index(type):
+  return _mycol.create_index(
+    [(_index_names[type]["fields"], pymongo.TEXT)],
+    language_override="article_language",
+    name=_index_names[type]["name"])
+
+def create_regular_index_by_type(type):
+  return _mycol.create_index(
+    [(_index_names[type]["fields"], pymongo.DESCENDING)],
+    language_override = "article_language",
+    name=_index_names[type]["name"])
 
 def remove_index(type):
   try:
+    print(type)
     index_name = _index_names[type]["name"]
     print(f"Removing index {index_name}")
     _mycol.drop_index(index_name)

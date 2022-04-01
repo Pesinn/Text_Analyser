@@ -138,6 +138,7 @@ def indexes_input():
 def create_index_input():
   print("T - Create Text Index")
   print("W - Create Wildcard Index")
+  print("R - Create Regular Index")
   inp = input("").upper()
   
   if inp == "T":
@@ -146,6 +147,8 @@ def create_index_input():
   elif inp == "W":
     print("Creating Wildcard Index")
     db_layer.create_wildcard_index()
+  elif inp == "R":
+    db_layer.create_regular_index()
 
 def delete_index_input():
   print("A - Remove all indexes")
@@ -160,5 +163,7 @@ def delete_index_input():
     db_layer.remove_text_index()
   elif inp == "W":
     db_layer.remove_wildcard_index()
+  elif inp == "R":
+    db_layer.remove_regular_index()
 
 startup()
