@@ -1,3 +1,5 @@
+from datetime import date
+
 import nlp
 import unittest
 import utils
@@ -102,6 +104,18 @@ class utils_combine_dictionaries:
       """
     )
 
+class utils_convert_to_datetime:  
+  def valid_date(self):
+    self.assertEqual(utils.convert_to_datetime("20210512"), date(2021, 5, 12), "Date should be: 2021, 5, 12")
+  def only_year_date(self):
+    self.assertEqual(utils.convert_to_datetime("2020"), date(2020, 1, 1), "Date should be: 2020, 1, 1")
+  def invalid_date(self):
+    with self.assertRaises(Exception):
+      utils.convert_to_datetime("sometext")
+  def too_many_digits(self):
+    with self.assertRaises(Exception):
+      utils.convert_to_datetime("20200911811401101")
+
 class NLP_Test(unittest.TestCase):
   def test_remove_irrelevant_text(self):
     nlp_remove_irrelevant_text.three_stubs_two_last_irrelevant(self)
@@ -119,5 +133,11 @@ class Utils_Test(unittest.TestCase):
   def test_combine_dictionaries(self):
     utils_combine_dictionaries.last_item_identical(self)
     utils_combine_dictionaries.no_item_identical(self)
+    
+  def test_convert_to_datetime(self):
+    utils_convert_to_datetime.valid_date(self)
+    utils_convert_to_datetime.only_year_date(self)
+    utils_convert_to_datetime.invalid_date(self)
+    utils_convert_to_datetime.too_many_digits(self)
 
 unittest.main()

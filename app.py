@@ -18,16 +18,6 @@ def beautify_print(t):
   json_str = pprint.pformat(t)
   print(json_str)
 
-def convert_to_datetime(_date):
-  if(len(_date) <= 3 or len(_date) == 5 or len(_date) == 7 or len(_date) > 8):
-    raise Exception(f"Input date cannot include {len(_date)} digits - it must contain 4,6 or 8")
-  if(len(_date) == 4):
-    return date(year=int(_date[0:4]), month=1, day=1)
-  if(len(_date) == 6):
-    return date(year=int(_date[0:4]), month=int(_date[4:6]), day=1)
-  if(len(_date) == 8):
-    return date(year=int(_date[0:4]), month=int(_date[4:6]), day=int(_date[6:8]))
-
 def process_files():
   l = listdir(data_folder)
   l.sort()
