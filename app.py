@@ -23,22 +23,46 @@ def process_files():
   for f in l:
     print(f)
     if can_be_processed(f):
-      inner_folder = data_folder+"/"+f+"/per_day"
-      for i in listdir(inner_folder):
-        full_path = join(inner_folder, i)
-        try:
-          d = json.load(gzip.open(full_path))
-          for a in d:
-            article_db = create_storage_article_obj(d[a], a, f, i)
-            if(article_db != {}):
-              db_layer.save_object(article_db)
-        except Exception as e:
-          print(e)
-          continue
       fp.set_processed(f)
+      inner_folder = data_folder+"/"+f+"/per_day"
+      files = listdir(inner_folder)
+      files.sort()
+      for i in files:
+        print(i)
+        if file_can_be_processed(i):
+          full_path = join(inner_folder, i)
+          try:
+            d = json.load(gzip.open(full_path))
+            for a in d:
+              article_db = create_storage_article_obj(d[a], a, f, i)
+              if(article_db != {}):
+                db_layer.save_object(article_db)
+          except Exception as e:
+            print(e)
+            continue
+          
+          fp.set_processed_file(i)
+      fp.delete_processed_file()
+
+# -----------------------------------------------------------
+# Compare the date of input filename (yyyymmdd.gz) to the
+# latest file that was processed in the processed.txt. To
+# prevent same files to be processed twice.
+# -----------------------------------------------------------
+def file_can_be_processed(file_name):
+  file_name = file_name.replace(".gz", "")
+  file_date = ut.convert_to_datetime(file_name)
+  last_file_name = fp.get_latest_file()
+  if(last_file_name == ""):
+    return True
+  else:
+    last_file_date = ut.convert_to_datetime(last_file_name)
+    if last_file_date < file_date:
+      return True
+  return False
 
 def can_be_processed(name):
-  if fp.exist(name) or name[-2:] == "fr" or name[-2:] == "de" or name[-2:] == "es" or name[-2:] == "it" or name[-2:] == "ru":
+  if fp.is_finished(name) or name[-2:] == "fr" or name[-2:] == "de" or name[-2:] == "es" or name[-2:] == "it" or name[-2:] == "ru":
     return False
   return True
 
