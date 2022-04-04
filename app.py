@@ -1,6 +1,5 @@
 from os import listdir
 from os.path import join
-from datetime import date
 import file_process as fp
 
 import nlp
@@ -137,12 +136,12 @@ def create_index_input():
   
   if inp == "T":
     print("Creating Text Index")
-    db_layer.create_text_index()
+    db_layer.create_text_ind()
   elif inp == "W":
     print("Creating Wildcard Index")
-    db_layer.create_wildcard_index()
+    db_layer.create_wildcard_ind()
   elif inp == "R":
-    db_layer.create_regular_index()
+    db_layer.create_regular_ind()
 
 def delete_index_input():
   print("A - Remove all indexes")
@@ -154,10 +153,10 @@ def delete_index_input():
     print("Removing All Indexes")
     db_layer.remove_all_indexes()
   elif inp == "T":
-    db_layer.remove_text_index()
+    db_layer.remove_text_ind()
   elif inp == "W":
-    db_layer.remove_wildcard_index()
+    db_layer.remove_wildcard_ind()
   elif inp == "R":
-    db_layer.remove_regular_index()
+    db_layer.remove_regular_ind()
 
 startup()

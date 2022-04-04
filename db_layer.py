@@ -48,22 +48,22 @@ def remove_all_indexes():
   for i in _index_names:
     remove_index(i)
 
-def remove_wildcard_index():
+def remove_wildcard_ind():
   remove_index("WILDCARD")
 
-def remove_text_index():
+def remove_text_ind():
   remove_index("TEXT")
   
-def remove_regular_index():
+def remove_regular_ind():
   remove_index("REGULAR")
   
-def create_wildcard_index():
+def create_wildcard_ind():
   create_index("WILDCARD")
   
-def create_text_index():
+def create_text_ind():
   create_index("TEXT")
   
-def create_regular_index():
+def create_regular_ind():
   create_index("REGULAR")
 
 def create_index(type):
