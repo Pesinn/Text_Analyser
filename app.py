@@ -119,11 +119,15 @@ def recreate_input():
 def indexes_input():
   print("C - Create")
   print("R - Remove")
+  print("W - View")
+
   inp = input("").upper()
   if inp == "C":
     create_index_input()
   elif inp == "R":
     delete_index_input()
+  elif inp == "W":
+    db_layer.print_index_info()
   
 def create_index_input():
   print("T - Create Text Index")
