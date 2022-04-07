@@ -6,8 +6,9 @@ from pymongo import (common, helpers, message)
 _myclient = pymongo.MongoClient('localhost', 27017)
 _dbList = _myclient.list_database_names()
 
-_mydb = _myclient["news_data_TEST"]
-_mycol = _mydb["news_data"]
+db_name = "news_data_TEST"
+_mydb = _myclient[db_name]
+_mycol = _mydb["news_data_multiprocess"]
 
 _index_names = {
   "TEXT": {"name": "text_index", "fields": "keywords"},
@@ -32,8 +33,7 @@ def drop_collection():
   _mycol.drop()
 
 def create_db():
-  name = "news_data_TEST"
-  db = _myclient[name]
+  _myclient[db_name]
   list_of_db = _myclient.list_database_names()
   
   print("All collections:")
