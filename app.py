@@ -32,17 +32,24 @@ def process_files():
         if file_can_be_processed(i):
           full_path = join(inner_folder, i)
           try:
-            d = json.load(gzip.open(full_path))
-            for a in d:
-              article_db = create_storage_article_obj(d[a], a, f, i)
-              if(article_db != {}):
-                db_layer.save_object(article_db)
+            data = json.load(gzip.open(full_path))
+            process_articles(data, f, i)
           except Exception as e:
             print(e)
             continue
           
           fp.set_processed_file(i)
       fp.delete_processed_file()
+
+def process_articles(articles, news_source, date):
+  for a in articles:
+    process_article(articles[a], a, news_source, date)
+
+def process_article(article, id, news_source, date):
+  article_db = create_storage_article_obj(article, id, news_source, date)
+  if(article_db != {}):
+    db_layer.save_object(article_db)
+
 
 # -----------------------------------------------------------
 # Compare the date of input filename (yyyymmdd.gz) to the
