@@ -55,7 +55,6 @@ def text_to_list(text):
   return text_list
 
 def named_entities(text):
-#  text_list = text_to_list(text)
   text_list = word_tokenize(text)
   cleaned = clean_text(text_list)
 
