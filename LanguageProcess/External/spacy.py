@@ -1,10 +1,6 @@
 import spacy
 
-from spacy.language import Language
-from spacy_langdetect import LanguageDetector
-
-
-nlp = spacy.load("en_core_web_sm")
+nlp = spacy.load("en_core_web_lg")
 
 def natural_language_process(text):
   doc = nlp(text)
