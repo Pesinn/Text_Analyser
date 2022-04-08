@@ -19,6 +19,10 @@ _index_names = {
 print("Databases: ", _dbList)
 
 def save_object(object):
+  _myclient = pymongo.MongoClient('localhost', 27017)
+  _mydb = _myclient[db_name]
+  _mycol = _mydb["news_data_multiprocess"]
+
   k = {"_id": object["_id"]}
   x = _mycol.update(k, object, upsert=True)
 

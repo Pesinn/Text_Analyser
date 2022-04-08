@@ -14,8 +14,8 @@ import multiprocessing as mp
 import time
 
 data_folder = "news_data"
-process = "SINGLE"
-cpu_count = 2#mp.cpu_count()
+process = "MULTI"
+cpu_count = mp.cpu_count()
 
 def beautify_print(t):
   json_str = pprint.pformat(t)
@@ -67,31 +67,20 @@ def process_articles_multiprocess(articles, news_source, date):
       "source": news_source,
       "date": date
     }
-    print("hiii")
 
     limited_articles.append(d)
     if len(limited_articles) >= cpu_count:
-#      print(limited_articles)
       pool.map(process_article, limited_articles)
-      print("=======================")
       limited_articles = []
-    time.sleep(1)
 
 def process_article(article_arr):
-#  print(article_arr)
-  print(article_arr)
   article_db = create_storage_article_obj(
     article_arr["articles"],
     article_arr["id"],
     article_arr["source"],
     article_arr["date"])
-  print("article: ", article_db)
   if(article_db != {}):
-    print("==>")
     db_layer.save_object(article_db)
-  else:
-    print("else")
-
 
 # -----------------------------------------------------------
 # Compare the date of input filename (yyyymmdd.gz) to the
@@ -129,7 +118,7 @@ def create_storage_article_obj(article, id, news_source, date):
 
   title_analysis = nlp.analyse_nlp(title_stripped, lang)
   description_analysis = nlp.analyse_nlp(description_stripped, lang)
-
+  
   return {
     "_id": id,
     "article_language": lang,
