@@ -10,8 +10,12 @@ import json
 import pprint
 import db_layer
 import language
+import multiprocessing as mp
+import time
 
 data_folder = "news_data"
+process = "SINGLE"
+cpu_count = 2#mp.cpu_count()
 
 def beautify_print(t):
   json_str = pprint.pformat(t)
@@ -28,12 +32,12 @@ def process_files():
       files = listdir(inner_folder)
       files.sort()
       for i in files:
-        print(i)
-        if file_can_be_processed(i):
+        date = i.replace(".gz", "")
+        if file_can_be_processed(date):
           full_path = join(inner_folder, i)
           try:
             data = json.load(gzip.open(full_path))
-            process_articles(data, f, i)
+            process_articles(data, f, date)
           except Exception as e:
             print(e)
             continue
@@ -42,13 +46,51 @@ def process_files():
       fp.delete_processed_file()
 
 def process_articles(articles, news_source, date):
-  for a in articles:
-    process_article(articles[a], a, news_source, date)
+  if process == "MULTI":
+    process_articles_multiprocess(articles, news_source, date)
+  else:
+    process_articles_singleprocess(articles, news_source, date)
 
-def process_article(article, id, news_source, date):
-  article_db = create_storage_article_obj(article, id, news_source, date)
+def process_articles_singleprocess(articles, news_source, date):
+  for a in articles:
+    article_db = create_storage_article_obj(articles[a], a, news_source, date)
+    if(article_db != {}):
+      db_layer.save_object(article_db)
+
+def process_articles_multiprocess(articles, news_source, date):
+  pool = mp.Pool(cpu_count)
+  limited_articles = []
+  for a in articles:
+    d = {
+      "articles": articles[a],
+      "id": a,
+      "source": news_source,
+      "date": date
+    }
+    print("hiii")
+
+    limited_articles.append(d)
+    if len(limited_articles) >= cpu_count:
+#      print(limited_articles)
+      pool.map(process_article, limited_articles)
+      print("=======================")
+      limited_articles = []
+    time.sleep(1)
+
+def process_article(article_arr):
+#  print(article_arr)
+  print(article_arr)
+  article_db = create_storage_article_obj(
+    article_arr["articles"],
+    article_arr["id"],
+    article_arr["source"],
+    article_arr["date"])
+  print("article: ", article_db)
   if(article_db != {}):
+    print("==>")
     db_layer.save_object(article_db)
+  else:
+    print("else")
 
 
 # -----------------------------------------------------------
@@ -56,9 +98,9 @@ def process_article(article, id, news_source, date):
 # latest file that was processed in the processed.txt. To
 # prevent same files to be processed twice.
 # -----------------------------------------------------------
-def file_can_be_processed(file_name):
-  file_name = file_name.replace(".gz", "")
-  file_date = ut.convert_to_datetime(file_name)
+def file_can_be_processed(date):
+  print(date)
+  file_date = ut.convert_to_datetime(date)
   last_file_name = fp.get_latest_file()
   if(last_file_name == ""):
     return True

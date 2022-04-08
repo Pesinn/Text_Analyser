@@ -65,3 +65,5 @@ def get_named_entities(doc):
     except:
       named_entity[text] += entity.label_
   return named_entity
+
+#natural_language_process("Bristol Myers Squibb Co, in New York, has reached $100 billion valuation. Not Bristol, the city.")

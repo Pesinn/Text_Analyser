@@ -31,12 +31,12 @@ def analyse_nlp(text, lang):
   nlp_data = sp.natural_language_process(text)
 
   # Get named entities from CoreNLP
-  named_ent = cnlp.named_entities(text)
+  #named_ent = cnlp.named_entities(text)
   
-  nlp_data["entities"] = combine_named_entities(
-    named_ent,
-    nlp_data["entities"]
-  )
+  #nlp_data["entities"] = combine_named_entities(
+  #  named_ent,
+  #  nlp_data["entities"]
+  #)
 
   return nlp_data
 
