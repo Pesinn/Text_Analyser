@@ -22,10 +22,6 @@ python -m spacy download en_core_news_sm
 ```
 
 ```sh
-python3 init.js
-```
-
-```sh
 python3 app.js
 ```
 

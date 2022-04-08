@@ -1,4 +1,3 @@
 vaderSentiment
 spacy
 spacy-langdetect
-stanza

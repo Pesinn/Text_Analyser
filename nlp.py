@@ -2,30 +2,17 @@ from numpy import split
 import LanguageProcess.External.spacy as sp
 import LanguageProcess.NLP.en as english
 import LanguageProcess.NLP.default as default_lang
-import LanguageProcess.External.core_nlp as cnlp
 
 # Sentences that should be ignored
 ignore_array = ["Breaking UK News & World News Headlines",
                 "Daily Star"
                 "read more"]
 
-def test(text):
-  #return sp.natural_language_process(text)
-  return cnlp.named_entities(text)
-
 def analyse_nlp(text, lang):
   text = clean_text(text, lang)
   
   # Get data from Spacy
   nlp_data = sp.natural_language_process(text)
-
-  # Get named entities from CoreNLP
-  #named_ent = cnlp.named_entities(text)
-  
-  #nlp_data["entities"] = combine_named_entities(
-  #  named_ent,
-  #  nlp_data["entities"]
-  #)
 
   return nlp_data
 
