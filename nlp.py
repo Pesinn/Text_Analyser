@@ -4,17 +4,6 @@ import LanguageProcess.NLP.en as english
 import LanguageProcess.NLP.default as default_lang
 import LanguageProcess.External.core_nlp as cnlp
 
-import utils as ut
-from spacy.language import Language
-from spacy_langdetect import LanguageDetector
-
-def get_lang_detector(nlp, name):
-    return LanguageDetector()
-
-#def add_language_detector():
-#  Language.factory("language_detector", func=get_lang_detector)
-#  nlp.add_pipe('language_detector', last=True)
-
 # Sentences that should be ignored
 ignore_array = ["Breaking UK News & World News Headlines",
                 "Daily Star"
