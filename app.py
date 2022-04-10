@@ -14,7 +14,22 @@ import multiprocessing as mp
 import time
 
 data_folder = "news_data"
+
+# MULTI or empty
+# MULTI: Multiple processed when creating annotating object.
+# Empty for single process solution
 process = "MULTI"
+
+# "MANY" or empty
+# MANY: Multiple inserts to mongodb.
+# Empty: One article is inserted at a time.
+
+# Keep in mind that upsert is not reliable
+# when MANY is used. However, it is faster.
+db_method = ""
+
+# Only used for multiprocessing functionality.
+# Indicates how many threads can be active at a time.
 cpu_count = mp.cpu_count()
 
 def beautify_print(t):
@@ -54,6 +69,7 @@ def process_articles(articles, news_source, date):
 def process_articles_singleprocess(articles, news_source, date):
   for a in articles:
     article_db = create_storage_article_obj(articles[a], a, news_source, date)
+
     if(article_db != {}):
       db_layer.save_object(article_db)
 
@@ -70,17 +86,23 @@ def process_articles_multiprocess(articles, news_source, date):
 
     limited_articles.append(d)
     if len(limited_articles) >= cpu_count:
-      pool.map(process_article, limited_articles)
+      save_articles(pool.map(create_articles_obj, limited_articles))
       limited_articles = []
+  pool.close()
 
-def process_article(article_arr):
-  article_db = create_storage_article_obj(
+def save_articles(data):
+  if db_method == "MANY":
+    db_layer.save_objects(data)
+  else:
+    for i in data:
+      db_layer.save_object(i)
+
+def create_articles_obj(article_arr):
+  return create_storage_article_obj(
     article_arr["articles"],
     article_arr["id"],
     article_arr["source"],
     article_arr["date"])
-  if(article_db != {}):
-    db_layer.save_object(article_db)
 
 # -----------------------------------------------------------
 # Compare the date of input filename (yyyymmdd.gz) to the
@@ -88,7 +110,6 @@ def process_article(article_arr):
 # prevent same files to be processed twice.
 # -----------------------------------------------------------
 def file_can_be_processed(date):
-  print(date)
   file_date = ut.convert_to_datetime(date)
   last_file_name = fp.get_latest_file()
   if(last_file_name == ""):
