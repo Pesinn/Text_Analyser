@@ -8,7 +8,7 @@ _dbList = _myclient.list_database_names()
 
 db_name = "news_data_TEST"
 _mydb = _myclient[db_name]
-_mycol = _mydb["news_data_multiprocess"]
+_mycol = _mydb["news_data"]
 
 _index_names = {
   "TEXT": {"name": "text_index", "fields": "keywords"},
