@@ -98,7 +98,7 @@ lang_dict = {
   "msnbc.com": "en",
   "n-tv.de": "de",
   "nbcnews.com": "en",
-  "ndr.de": "en",
+  "ndr.de": "de",
   "news.com.au": "en",
   "news.sky.com": "en",
   "news.yahoo.com": "en",
