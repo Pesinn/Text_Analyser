@@ -179,9 +179,32 @@ def load_json():
   file.close()
   return data
 
+def sync_filters():
+  sync_languages()
+  sync_sources()
+  
+def sync_languages():
+  l = db_layer.get_object("article_language")
+  for i in l:
+    try:
+      db_layer.save_filter({"language": i})
+    except Exception as e:
+      print(e)
+      continue
+
+def sync_sources():
+  s = db_layer.get_object("source")
+  for i in s:
+    try:
+      db_layer.save_filter({"source": i})
+    except Exception as e:
+      print(e)
+      continue
+
 def startup():
   print("RC - ReCreate Database")
   print("PR - Process news articles")
+  print("SY - Sync filters")
   print("I - Indexes")
 
   inp = input("What do you want to do?: ").upper()
@@ -191,6 +214,8 @@ def startup():
     process_files()
   elif inp == "I":
     indexes_input()
+  elif inp == "SY":
+    sync_filters()
 
 def recreate_input():
   inp = input("Are you really sure? (write YES and press enter if you are): ")

@@ -9,6 +9,7 @@ _dbList = _myclient.list_database_names()
 db_name = "news_data_TEST"
 _mydb = _myclient[db_name]
 _mycol = _mydb["news_data"]
+_mycol_filters = _mydb["news_data_filters"]
 
 _index_names = {
   "TEXT": {"name": "text_index", "fields": "keywords"},
@@ -31,6 +32,14 @@ def recreate_db():
   
 def drop_collection():
   _mycol.drop()
+  _mycol_filters.drop()
+
+def get_object(name):
+  return [x for x in _mycol.distinct(name)]
+
+def save_filter(obj):
+  print("obj: ", obj)
+  _mycol_filters.insert(obj)
 
 def create_db():
   _myclient[db_name]
